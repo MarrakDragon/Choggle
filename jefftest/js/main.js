@@ -21,22 +21,32 @@ function requestData() {
                 },
                 error: function(jqXHR) {
                     console.log("ajax error " + jqXHR.status);
-                },
+                    },
                 success: function( data, status, jqXHR ){
-
-            }
+                    console.log('ajax call succeeded!');
+                }   
             };
             console.log('Request = ' + request);
             return $.ajax(request);
         }
 
-        requestWords = function( letters, size ) {
-            var stuff = self.ajax('http://localhost:1337/check/isWordValid', 'GET', 'word=bottle');
-            console.log('returned from self.ajax call ' + stuff);
+        checkWord= function (word) {
+            var deferredObject = self.ajax('http://localhost:3000/check/isWordValid', 'GET', 'word=bottle');
+            deferredObject.done(function (result) {
+                console.log(' checkWord: got ajax callback, result = ' + JSON.stringify(result));
+            });
+        }
+
+        getWords = function( letters, size ) {
+            var deferredObject = self.ajax('http://localhost:3000/check/getWords', 'GET', { letters: letters, size: size });
+            deferredObject.done(function (result) {
+                console.log(' getWords: got ajax callback, result = ' + JSON.stringify(result));
+            });
         }
 
         return {
-            requestWords: requestWords
+            checkWord: checkWord,
+            getWords: getWords
         };
             
     }
