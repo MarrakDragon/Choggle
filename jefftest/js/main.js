@@ -1,10 +1,11 @@
 
 
-
+//
+// Connect to the node endpoint and request data.
+//
 
 function requestData() {
         var self = this;
-        self.URI = 'http://localhost:1337/todo/api/v1.0/tasks';
 
         self.ajax = function(uri, method, data) {
             var request = {
@@ -16,8 +17,6 @@ function requestData() {
                 dataType: 'json',
                 data: data,
                 beforeSend: function (xhr) {
-                    //xhr.setRequestHeader("Authorization", 
-                    //    "Basic " + btoa(self.username + ":" + self.password));
                 },
                 error: function(jqXHR) {
                     console.log("ajax error " + jqXHR.status);
@@ -30,15 +29,15 @@ function requestData() {
             return $.ajax(request);
         }
 
-        checkWord= function (word) {
-            var deferredObject = self.ajax('http://localhost:3000/check/isWordValid', 'GET', 'word=bottle');
+        checkWord= function (wordToCheck, dictionary) {
+            var deferredObject = self.ajax('http://localhost:3000/check/isWordValid', 'GET', {word: wordToCheck, dictionaryToUse: dictionary } );// 'word=bottle');
             deferredObject.done(function (result) {
                 console.log(' checkWord: got ajax callback, result = ' + JSON.stringify(result));
             });
         }
 
-        getWords = function( letters, size ) {
-            var deferredObject = self.ajax('http://localhost:3000/check/getWords', 'GET', { letters: letters, size: size });
+        getWords = function( letters, size, dictionary ) {
+            var deferredObject = self.ajax('http://localhost:3000/check/getWords', 'GET', { letters: letters, size: size, dictionaryToUse: dictionary });
             deferredObject.done(function (result) {
                 console.log(' getWords: got ajax callback, result = ' + JSON.stringify(result));
             });
